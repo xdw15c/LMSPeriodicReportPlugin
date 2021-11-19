@@ -36,5 +36,6 @@ $_LANG['in date'] = 'z dnia';
 $_LANG['Gross value at invoice'] = 'Wartość brutto na fakturze';
 $_LANG['Balance at end of day'] = 'Saldo na koniec dnia';
 $_LANG['gereration of periodic reports'] = 'gererowanie raportu okresowego';
+$_LANG['Financial data export'] = 'Export danych finansowych';
 
 ?>

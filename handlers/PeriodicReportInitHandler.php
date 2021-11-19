@@ -64,7 +64,7 @@ class PeriodicReportInitHandler {
      */
 	public function menuInit(array $hook_data = array()) {
 		$hook_data['finances']['submenu'][] = array(
-			'name' => trans('Periodic Report'),
+			'name' => trans('Periodic report'),
 			'link' => '?m=periodicreport',
 			'tip' => trans('Financial data export'),
 			'prio' => 120,
