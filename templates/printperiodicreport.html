@@ -1,0 +1,155 @@
+{include file="clearheader.html"}
+<!--// $Id$ //-->
+<TABLE WIDTH="100%" CELLPADDING="3" ALIGN="CENTER">
+	<TR>
+		<TD WIDTH="535" VALIGN="TOP">
+			<H1>{$layout.pagetitle}</H1>
+		</TD>
+		<TD WIDTH="180" ALIGN="RIGHT" NOWRAP>
+			LMS {$layout.lmsv} @ {$layout.hostname}<BR>
+			{$smarty.now|date_format:"%A, %x"}<BR>
+			{t a=$layout.logname}Created by: $a{/t}
+		</TD>
+	</TR>
+</TABLE>
+<BR>
+<TABLE CELLPADDING="3" BORDER="1">
+	<TR>
+		<TD CLASS="HEAD" ALIGN="CENTER">
+			{trans("No.")}
+		</TD>
+		<TD CLASS="HEAD" ALIGN="CENTER" WIDTH="250">
+			{trans("Customer")}
+		</TD>
+		<TD CLASS="HEAD" ALIGN="CENTER" WIDTH="100">
+			{trans("Invoice No.")}
+		</TD>
+		<TD CLASS="HEAD" ALIGN="CENTER" WIDTH="100">
+			{trans("Gross value at invoice")}
+		</TD>
+		<TD CLASS="HEAD" ALIGN="CENTER" WIDTH="80">
+			{trans("pay in")}
+		</TD>
+		<TD CLASS="HEAD" ALIGN="CENTER" WIDTH="80">
+			{trans("in date")}
+		</TD>
+		<TD CLASS="HEAD" ALIGN="CENTER" WIDTH="80">
+			{trans("Owing")}
+		</TD>
+		<TD CLASS="HEAD" ALIGN="CENTER" WIDTH="80">
+			{trans("Has")}
+		</TD>
+		{if isset($dayBeforeBalance)}
+    		<TD CLASS="HEAD" ALIGN="CENTER" WIDTH="80">
+			{trans("Balance at end of day")}<BR>{$dayBeforeBalance|date_format:"%Y/%m/%d"}
+		</TD>
+		{/if}
+	</TR>
+	{cycle values="white,grey" print=false}
+	{foreach $customer_list as $singleCustomer}
+	<TR class="{cycle advance=false}" VALIGN="TOP">
+		<TD ALIGN="CENTER" style="padding: 5px;">
+			{counter}.
+		</TD>
+		<TD ALIGN="LEFT" style="padding: 5px;">
+			[ID#{$singleCustomer.id|string_format:"%04d"}]
+			{$singleCustomer.name}
+			{$singleCustomer.lastname}
+			<br>
+			{$singleCustomer.city}
+			{$singleCustomer.address}
+		</TD>
+		<TD ALIGN="CENTER" style="padding: 5px;">
+			{foreach $singleCustomer.invoicelist as $singleInvoiceNumber}
+				{$singleInvoiceNumber}{if !$singleInvoiceNumber@last}<BR>{/if}
+			{/foreach}
+		</TD>
+		<TD ALIGN="CENTER" style="padding: 5px;">
+			{foreach $singleCustomer.invoicepricelist as $singleInvoicePrice}
+				{$singleInvoicePrice|money_format}{if !$singleInvoicePrice@last}<BR>{/if}
+			{/foreach}
+		</TD>
+		<TD ALIGN="CENTER" style="padding: 5px;">
+			{foreach $singleCustomer.paymentlist as $singlePaymentPrice}
+				{$singlePaymentPrice|money_format}{if !$singlePaymentPrice@last}<BR>{/if}
+			{/foreach}
+		</TD>
+		<TD ALIGN="CENTER" style="padding: 5px;">
+			{foreach $singleCustomer.paymentDatelist as $singlePaymentDate}
+				{$singlePaymentDate|date_format:"%d.%m.%Y"}{if !$singlePaymentDate@last}<BR>{/if}
+			{/foreach}
+		</TD>
+		<TD ALIGN="CENTER" style="padding: 5px;">
+			{if isset($singleCustomer.owing)}
+				{$singleCustomer.owing|money_format}
+			{/if}
+		</TD>
+		<TD ALIGN="CENTER" style="padding: 5px;">
+		{if isset($singleCustomer.has)}
+				{$singleCustomer.has|money_format}
+			{/if}
+		</TD>
+		{if isset($dayBeforeBalance)}
+		<TD ALIGN="CENTER" style="padding: 5px;">
+				{$singleCustomer.dayBeforeBalance|money_format}
+		</TD>
+		{/if}
+	</TR>
+	<TR class="{cycle}">
+		<TD></TD>
+		<TD></TD>
+		<TD ALIGN="right">
+			{trans("Total:")}
+		</TD>
+		<TD ALIGN="center">
+			{$singleCustomer.invoicesum|money_format}
+		</TD>
+		<TD ALIGN="center">
+			{$singleCustomer.paymentsum|money_format}
+		</TD>
+		<TD></TD>
+		<TD></TD>
+		<TD></TD>
+		{if isset($dayBeforeBalance)}
+		<TD></TD>
+		{/if}
+	</TR>
+	{foreachelse}
+	<TR>
+		<TD ALIGN="center"  COLSPAN="8">
+			<P>&nbsp;</P>
+			<P><B>{trans("No such cash operations.")}</B></P>
+			<P>&nbsp;</P>
+		</TD>
+	</TR>
+	{/foreach}
+	<TR>
+		<TD CLASS="HEADGREY" ALIGN="RIGHT" COLSPAN="2">
+			<B>{trans("Total:")}</B>
+		</TD>
+		<TD CLASS="HEADGREY" ALIGN="CENTER" NOWRAP>
+			&mdash;&mdash;&mdash;
+		</TD>
+		<TD CLASS="HEADGREY" ALIGN="RIGHT" NOWRAP>
+			<B>{$summaryInvoice|money_format}</B>
+		</TD>
+		<TD CLASS="HEADGREY" ALIGN="RIGHT" NOWRAP>
+			<B>{$summaryPayment|money_format}</B>
+		</TD>
+		<TD CLASS="HEADGREY" ALIGN="CENTER" NOWRAP>
+			&mdash;&mdash;&mdash;
+		</TD>
+		<TD CLASS="HEADGREY" ALIGN="RIGHT" NOWRAP>
+			<B>{sum array=$customer_list column="owing" string_format=$LANGDEFS.$_language.money_format}</B>
+		</TD>
+		<TD CLASS="HEADGREY" ALIGN="RIGHT" NOWRAP>
+			<B>{sum array=$customer_list column="has" string_format=$LANGDEFS.$_language.money_format}</B>
+		</TD>
+		{if isset($dayBeforeBalance)}
+		<TD CLASS="HEADGREY" ALIGN="RIGHT" NOWRAP>
+			<B>{sum array=$customer_list column="dayBeforeBalance" string_format=$LANGDEFS.$_language.money_format}</B>
+		</TD>
+		{/if}
+	</TR>
+</TABLE>
+{include file="clearfooter.html"}

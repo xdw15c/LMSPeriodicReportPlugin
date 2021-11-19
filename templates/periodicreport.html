@@ -1,0 +1,51 @@
+{extends file="layout.html"}
+{block name=title}LMS: {$layout.pagetitle|striphtml}{/block}
+{block name=module_content}
+<!--// $Id$ //-->
+<H1>{$layout.pagetitle}</H1>
+<FORM method="post" name="periodicreport" action="?m=periodicreport&amp;type=periodicreport">
+<TABLE class="lmsbox" >
+	<THEAD>
+		<TR>
+			<TD style="width: 1%;">
+				<IMG src="img/money.gif" alt="">
+			</TD>
+			<TD style="width: 99%;">
+				<B>{trans("Periodic report")}</B>
+			</TD>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR>
+			<TD class="container" width="100%" colspan="2">
+				<TABLE width="100%" cellpadding="3">
+					<TR>
+						<TD style="width: 1%;">
+							<IMG src="img/calendar.gif" alt="">
+						</TD>
+						<TD style="width: 99%;" nowrap>
+							<B>{trans("Period:")}</B>&nbsp;
+							{trans("From")}&nbsp;<INPUT type="text" name="from" SIZE="10" maxlength="10" placeholder="{trans("yyyy/mm/dd")}" {tip class="calendar" text="Enter date in 'yyyy/mm/dd' format or click to choose it from calendar"}>
+							{trans("To")}&nbsp;<INPUT type="text" name="to" SIZE="10" maxlength="10" placeholder="{trans("yyyy/mm/dd")}" {tip class="calendar" text="Enter date in 'yyyy/mm/dd' format (empty field means current date) or click to choose it from calendar"}>
+
+							<LABEL>
+								<input type="checkbox" name="allowZeroClient"> {trans("Include zero balance client")}
+							</LABEL>
+							<LABEL>
+								<input type="checkbox" name="monthBeginSum"> {trans("Day after balance")}
+							</LABEL>
+						</TD>
+					</TR>
+				</TABLE>
+			</TD>
+		</TR>
+		<TR>
+			<TD style="width: 100%;" colspan="2" align="right">
+				<A href="javascript:document.periodicreport.target='_blank';document.periodicreport.submit();">{trans("Print")} <IMG src="img/print.gif" alt="" hspace="2"></A>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+</FORM>
+
+{/block}
